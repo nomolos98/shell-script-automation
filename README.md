@@ -1,21 +1,24 @@
-# shell-script-automation
+#### shell-script-automation
 
-# !/bin/bash
+#### !/bin/bash
 
-# Set the AWS profile environment variable
+#### Set the AWS profile environment variable
 export AWS_PROFILE=default
 
-# Function to check the number of arguments provided to the script
+#### Function to check the number of arguments provided to the script
 
+```
 check_num_of_args() {
     if [ "$#" -ne 1 ]; then
         echo "Usage: $0 <environment>"
         exit 1
     fi
 }
+```
 
-# Function to activate the appropriate environment based on user input
+#### Function to activate the appropriate environment based on user input
 
+```
 activate_infra_environment() {
     case "$ENVIRONMENT" in
         local)
@@ -33,18 +36,22 @@ activate_infra_environment() {
             ;;
     esac
 }
+```
 
-# Function to check if AWS CLI is installed
+#### Function to check if AWS CLI is installed
 
+```
 check_aws_cli() {
     if ! command -v aws &> /dev/null; then
         echo "AWS CLI is not installed. Please install it before proceeding."
         exit 1
     fi
 }
+```
 
 # Function to check if the AWS profile environment variable is set
 
+```
 check_aws_profile() {
     if [ -z "$AWS_PROFILE" ]; then
         echo "AWS profile environment variable is not set."
@@ -53,9 +60,11 @@ check_aws_profile() {
         echo "Using AWS_PROFILE=$AWS_PROFILE"
     fi
 }
+```
 
 # Function to create a security group with SSH and HTTP access
 
+```
 create_security_group() {
     local sg_name="datawise-security-group"
     local vpc_id=$(aws ec2 describe-vpcs --query 'Vpcs[0].VpcId' --output text)
@@ -65,11 +74,15 @@ create_security_group() {
         echo "Failed to create security group."
         exit 1
     fi
+```
     
-    # Allow SSH (port 22) and HTTP (port 80) access
-    aws ec2 authorize-security-group-ingress --group-id "$sg_id" --protocol tcp --port 22 --cidr 0.0.0.0/0
-    aws ec2 authorize-security-group-ingress --group-id "$sg_id" --protocol tcp --port 80 --cidr 0.0.0.0/0
-    
+#### Allow SSH (port 22) and HTTP (port 80) access
+
+aws ec2 authorize-security-group-ingress --group-id "$sg_id" --protocol tcp --port 22 --cidr 0.0.0.0/0
+
+aws ec2 authorize-security-group-ingress --group-id "$sg_id" --protocol tcp --port 80 --cidr 0.0.0.0/0
+
+    ```
     if [ $? -ne 0 ]; then
         echo "Failed to set security group rules."
         exit 1
@@ -77,8 +90,11 @@ create_security_group() {
     
     echo "Security group created with ID: $sg_id"
 }
+```
 
-# Function to create a new key pair and save it locally
+#### Function to create a new key pair and save it locally
+
+```
 create_key_pair() {
     local key_name="test-keypair"
     
@@ -90,9 +106,11 @@ create_key_pair() {
         echo "Key pair '$key_name' already exists."
     fi
 }
+```
 
-# Function to create EC2 instances with specified AMIs and configurations
+#### Function to create EC2 instances with specified AMIs and configurations
 
+```
 create_ec2_instances() {
     local ami_ids=(
         "ami-08a0d1e16fc3f61ea"  # Amazon Linux
@@ -130,9 +148,11 @@ create_ec2_instances() {
         fi
     done
 }
+```
 
-# Function to create S3 buckets for various departments
+#### Function to create S3 buckets for various departments
 
+```
 create_s3_buckets() {
     local company="datawise"
     local departments=("marketing" "sales" "hr" "operations" "media")
@@ -155,8 +175,11 @@ create_s3_buckets() {
         fi
     done
 }
+```
 
-# Function to upload a script to all EC2 instances
+#### Function to upload a script to all EC2 instances
+
+````
 upload_script_to_instances() {
     local instance_names=("AmazonLinuxInstance" "UbuntuInstance" "CentOSInstance")
 
@@ -180,9 +203,11 @@ upload_script_to_instances() {
         fi
     done
 }
+```
 
-# Function to execute a script on all EC2 instances
+#### Function to execute a script on all EC2 instances
 
+```
 execute_script_on_instances() {
     local instance_names=("AmazonLinuxInstance" "UbuntuInstance" "CentOSInstance")
 
@@ -202,9 +227,11 @@ execute_script_on_instances() {
         fi
     done
 }
+```
 
-# Function to install and start Apache on instances based on OS type
+#### Function to install and start Apache on instances based on OS type
 
+```
 install_and_start_apache() {
     local os=$1
 
@@ -228,9 +255,11 @@ install_and_start_apache() {
 
     echo "Apache installed and started on $os."
 }
+```
 
-# Function to deploy a sample web application on instances based on OS type
+#### Function to deploy a sample web application on instances based on OS type
 
+```
 deploy_sample_web_app() {
     local os=$1
     local content="<html><body><h1>Hello from $os</h1></body></html>"
@@ -247,9 +276,11 @@ deploy_sample_web_app() {
 
     echo "Sample web application deployed on $os."
 }
+```
 
-# Function to verify web application accessibility
+#### Function to verify web application accessibility
 
+```
 verify_web_app_access() {
     local instance_names=("AmazonLinuxInstance" "UbuntuInstance" "CentOSInstance")
 
@@ -267,13 +298,17 @@ verify_web_app_access() {
         fi
     done
 }
+```
 
-# Array of IAM user names
+#### Array of IAM user names
 
+```
 iam_user_names=("user1" "user2" "user3" "user4" "user5")
+```
 
-# Function to create IAM users
+#### Function to create IAM users
 
+```
 create_iam_users() {
     for username in "${iam_user_names[@]}"; do
         echo "Creating IAM user: $username..."
@@ -292,9 +327,11 @@ create_iam_users() {
         fi
     done
 }
+```
 
-# Function to create IAM group
+#### Function to create IAM group
 
+```
 create_iam_group() {
     local group_name="admin"
     echo "Creating IAM group: $group_name..."
@@ -312,9 +349,11 @@ create_iam_group() {
         echo "IAM group $group_name already exists."
     fi
 }
+```
 
-# Function to attach administrative policy to group
+#### Function to attach administrative policy to group
 
+```
 attach_admin_policy_to_group() {
     local group_name="admin"
     local policy_arn="arn:aws:iam::aws:policy/AdministratorAccess"
@@ -329,9 +368,11 @@ attach_admin_policy_to_group() {
         return 1
     fi
 }
+```
 
-# Function to assign users to group
+#### Function to assign users to group
 
+```
 assign_users_to_group() {
     for username in "${iam_user_names[@]}"; do
         echo "Adding user $username to group admin..."
@@ -345,56 +386,59 @@ assign_users_to_group() {
         fi
     done
 }
+```
 
-# Main script execution starts here
+#### Main script execution starts here
 
-# Set the environment variable
+#### Set the environment variable
+```
 ENVIRONMENT=$1
+```
 
-# Check the number of arguments
+#### Check the number of arguments
 check_num_of_args "$@"
 
-# Activate the appropriate environment
+#### Activate the appropriate environment
 activate_infra_environment
 
-# Check if AWS CLI is installed
+#### Check if AWS CLI is installed
 check_aws_cli
 
-# Check if AWS profile is set
+#### Check if AWS profile is set
 check_aws_profile
 
-# Create security group
+#### Create security group
 create_security_group
 
-# Create key pair
+#### Create key pair
 create_key_pair
 
-# Create EC2 instances
+#### Create EC2 instances
 create_ec2_instances
 
-# Create S3 buckets
+#### Create S3 buckets
 create_s3_buckets
 
-# Upload script to instances
+#### Upload script to instances
 upload_script_to_instances
 
-# Execute script on instances
+#### Execute script on instances
 execute_script_on_instances
 
-# Install and start Apache
+#### Install and start Apache
 install_and_start_apache "Amazon Linux"
 install_and_start_apache "Ubuntu"
 install_and_start_apache "CentOS"
 
-# Deploy sample web application
+#### Deploy sample web application
 deploy_sample_web_app "Amazon Linux"
 deploy_sample_web_app "Ubuntu"
 deploy_sample_web_app "CentOS"
 
-# Verify web application accessibility
+#### Verify web application accessibility
 verify_web_app_access
 
-# Manage IAM users
+#### Manage IAM users
 create_iam_users
 create_iam_group
 attach_admin_policy_to_group
