@@ -1,11 +1,12 @@
 # shell-script-automation
 
-#!/bin/bash
+# !/bin/bash
 
 # Set the AWS profile environment variable
 export AWS_PROFILE=default
 
 # Function to check the number of arguments provided to the script
+
 check_num_of_args() {
     if [ "$#" -ne 1 ]; then
         echo "Usage: $0 <environment>"
@@ -14,6 +15,7 @@ check_num_of_args() {
 }
 
 # Function to activate the appropriate environment based on user input
+
 activate_infra_environment() {
     case "$ENVIRONMENT" in
         local)
@@ -33,6 +35,7 @@ activate_infra_environment() {
 }
 
 # Function to check if AWS CLI is installed
+
 check_aws_cli() {
     if ! command -v aws &> /dev/null; then
         echo "AWS CLI is not installed. Please install it before proceeding."
@@ -41,6 +44,7 @@ check_aws_cli() {
 }
 
 # Function to check if the AWS profile environment variable is set
+
 check_aws_profile() {
     if [ -z "$AWS_PROFILE" ]; then
         echo "AWS profile environment variable is not set."
@@ -51,6 +55,7 @@ check_aws_profile() {
 }
 
 # Function to create a security group with SSH and HTTP access
+
 create_security_group() {
     local sg_name="datawise-security-group"
     local vpc_id=$(aws ec2 describe-vpcs --query 'Vpcs[0].VpcId' --output text)
@@ -87,6 +92,7 @@ create_key_pair() {
 }
 
 # Function to create EC2 instances with specified AMIs and configurations
+
 create_ec2_instances() {
     local ami_ids=(
         "ami-08a0d1e16fc3f61ea"  # Amazon Linux
@@ -126,6 +132,7 @@ create_ec2_instances() {
 }
 
 # Function to create S3 buckets for various departments
+
 create_s3_buckets() {
     local company="datawise"
     local departments=("marketing" "sales" "hr" "operations" "media")
@@ -175,6 +182,7 @@ upload_script_to_instances() {
 }
 
 # Function to execute a script on all EC2 instances
+
 execute_script_on_instances() {
     local instance_names=("AmazonLinuxInstance" "UbuntuInstance" "CentOSInstance")
 
@@ -196,6 +204,7 @@ execute_script_on_instances() {
 }
 
 # Function to install and start Apache on instances based on OS type
+
 install_and_start_apache() {
     local os=$1
 
@@ -221,6 +230,7 @@ install_and_start_apache() {
 }
 
 # Function to deploy a sample web application on instances based on OS type
+
 deploy_sample_web_app() {
     local os=$1
     local content="<html><body><h1>Hello from $os</h1></body></html>"
@@ -239,6 +249,7 @@ deploy_sample_web_app() {
 }
 
 # Function to verify web application accessibility
+
 verify_web_app_access() {
     local instance_names=("AmazonLinuxInstance" "UbuntuInstance" "CentOSInstance")
 
@@ -258,9 +269,11 @@ verify_web_app_access() {
 }
 
 # Array of IAM user names
+
 iam_user_names=("user1" "user2" "user3" "user4" "user5")
 
 # Function to create IAM users
+
 create_iam_users() {
     for username in "${iam_user_names[@]}"; do
         echo "Creating IAM user: $username..."
@@ -281,6 +294,7 @@ create_iam_users() {
 }
 
 # Function to create IAM group
+
 create_iam_group() {
     local group_name="admin"
     echo "Creating IAM group: $group_name..."
@@ -300,6 +314,7 @@ create_iam_group() {
 }
 
 # Function to attach administrative policy to group
+
 attach_admin_policy_to_group() {
     local group_name="admin"
     local policy_arn="arn:aws:iam::aws:policy/AdministratorAccess"
@@ -316,6 +331,7 @@ attach_admin_policy_to_group() {
 }
 
 # Function to assign users to group
+
 assign_users_to_group() {
     for username in "${iam_user_names[@]}"; do
         echo "Adding user $username to group admin..."
@@ -331,6 +347,7 @@ assign_users_to_group() {
 }
 
 # Main script execution starts here
+
 # Set the environment variable
 ENVIRONMENT=$1
 
